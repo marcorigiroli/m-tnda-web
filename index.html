@@ -1,149 +1,698 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Tienda - Blanqueamiento Dental</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cintas Blanqueadoras Dentales 5D</title>
 
-<style>
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #dfe9f3, #ffffff);
-}
+  <style>
+    :root{
+      --bg:#f5efe6;
+      --bg2:#eef4f8;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --blue:#4f6d8a;
+      --blue-dark:#334e68;
+      --beige:#d9cbb8;
+      --line:#d8dfe6;
+      --shadow:0 18px 40px rgba(31,41,55,.12);
+    }
 
-/* CONTENEDOR */
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:'Segoe UI', sans-serif;
+      background:linear-gradient(135deg,var(--bg),#fff 45%,var(--bg2));
+      color:var(--text);
+    }
 
-/* CARD PRODUCTO */
-.card {
-    background: white;
-    width: 350px;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-    overflow: hidden;
-    transition: 0.3s;
-    cursor: pointer;
-}
+    .top-bar{
+      height:8px;
+      background:linear-gradient(90deg,var(--blue-dark),var(--blue),var(--beige));
+    }
 
-.card:hover {
-    transform: translateY(-10px) scale(1.02);
-}
+    .container{
+      width:min(1100px,92%);
+      margin:0 auto;
+    }
 
-/* IMAGEN */
-.card img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-}
+    .hidden{display:none !important;}
 
-/* TEXTO */
-.card-content {
-    padding: 20px;
-    text-align: center;
-}
+    .home-wrap{
+      min-height:calc(100vh - 8px);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:28px 0;
+    }
 
-.card h1 {
-    margin: 10px 0;
-    font-size: 22px;
-}
+    .card{
+      background:var(--card);
+      width:min(430px,100%);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      transition:.3s;
+      cursor:pointer;
+      border:1px solid var(--line);
+    }
 
-.price {
-    color: black;
-    font-size: 26px;
-    font-weight: bold;
-}
+    .card:hover{
+      transform:translateY(-8px) scale(1.01);
+    }
 
-/* DETALLE (segunda pantalla) */
-.detail {
-    display: none;
-    padding: 40px;
-    text-align: center;
-}
+    .gallery{
+      position:relative;
+      background:#eef2f6;
+    }
 
-.detail img {
-    width: 80%;
-    max-width: 400px;
-    border-radius: 15px;
-    margin: 10px;
-}
+    .track{
+      display:flex;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      scroll-behavior:smooth;
+      scrollbar-width:none;
+    }
 
-/* BOTÓN */
-.btn {
-    display: inline-block;
-    margin-top: 25px;
-    padding: 15px 25px;
-    background: linear-gradient(135deg, #009ee3, #007bb8);
-    color: white;
-    font-size: 18px;
-    border-radius: 10px;
-    text-decoration: none;
-    transition: 0.3s;
-}
+    .track::-webkit-scrollbar{
+      display:none;
+    }
 
-.btn:hover {
-    transform: scale(1.05);
-    background: linear-gradient(135deg, #007bb8, #005f8a);
-}
+    .slide{
+      min-width:100%;
+      scroll-snap-align:start;
+    }
 
-/* BOTÓN VOLVER */
-.back {
-    margin-top: 20px;
-    display: block;
-    color: #555;
-    cursor: pointer;
-}
-</style>
+    .slide img{
+      width:100%;
+      height:300px;
+      object-fit:cover;
+      display:block;
+      background:#e8edf2;
+    }
 
+    .arrow{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      z-index:2;
+      width:42px;
+      height:42px;
+      border:none;
+      border-radius:50%;
+      background:rgba(255,255,255,.92);
+      color:#223;
+      font-size:22px;
+      cursor:pointer;
+      box-shadow:0 8px 18px rgba(0,0,0,.12);
+    }
+
+    .arrow.left{left:12px}
+    .arrow.right{right:12px}
+
+    .card-content{
+      padding:18px 18px 22px;
+      text-align:center;
+    }
+
+    .card h1{
+      margin:6px 0 8px;
+      font-size:18px;
+      line-height:1.2;
+    }
+
+    .small-title{
+      font-size:13px;
+      color:var(--muted);
+      margin:0 0 6px;
+    }
+
+    .info{
+      font-size:12px;
+      color:#4b5563;
+      line-height:1.5;
+      margin:0 0 10px;
+    }
+
+    .price{
+      color:var(--blue-dark);
+      font-size:26px;
+      font-weight:bold;
+      margin-top:8px;
+    }
+
+    .detail,
+    .buy{
+      display:none;
+      padding:28px 0 40px;
+    }
+
+    .detail-grid,
+    .buy-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:22px;
+      align-items:start;
+    }
+
+    .panel{
+      background:rgba(255,255,255,.84);
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:22px;
+    }
+
+    .detail h1,
+    .section-title{
+      margin:0 0 10px;
+      font-size:28px;
+      color:var(--blue-dark);
+    }
+
+    .sub{
+      font-size:13px;
+      color:var(--muted);
+      margin:4px 0;
+    }
+
+    .watermark{
+      font-size:20px;
+      color:rgba(79,109,138,.18);
+      font-weight:700;
+      margin:18px 0 0;
+      letter-spacing:.4px;
+      user-select:none;
+    }
+
+    .detail-gallery{
+      margin-top:16px;
+      position:relative;
+      overflow:hidden;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:#eef2f6;
+    }
+
+    .detail-track{
+      display:flex;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      scroll-behavior:smooth;
+      scrollbar-width:none;
+    }
+
+    .detail-track::-webkit-scrollbar{
+      display:none;
+    }
+
+    .detail-slide{
+      min-width:100%;
+      scroll-snap-align:start;
+    }
+
+    .detail-slide img{
+      width:100%;
+      height:340px;
+      object-fit:cover;
+      display:block;
+      background:#e8edf2;
+    }
+
+    .detail-arrow{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      z-index:2;
+      width:42px;
+      height:42px;
+      border:none;
+      border-radius:50%;
+      background:rgba(255,255,255,.92);
+      color:#223;
+      font-size:22px;
+      cursor:pointer;
+      box-shadow:0 8px 18px rgba(0,0,0,.12);
+    }
+
+    .detail-arrow.left{left:12px}
+    .detail-arrow.right{right:12px}
+
+    .btn{
+      display:inline-block;
+      margin-top:18px;
+      padding:14px 24px;
+      background:linear-gradient(135deg,var(--blue-dark),var(--blue));
+      color:#fff;
+      font-size:16px;
+      border-radius:12px;
+      text-decoration:none;
+      transition:.25s;
+      border:none;
+      cursor:pointer;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+    }
+
+    .back{
+      margin-top:18px;
+      display:inline-block;
+      color:var(--muted);
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .field{
+      margin-bottom:12px;
+    }
+
+    .field label{
+      display:block;
+      font-size:13px;
+      margin-bottom:6px;
+      color:var(--text);
+      font-weight:600;
+    }
+
+    .field input,
+    .field select,
+    .field textarea{
+      width:100%;
+      padding:12px 13px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      font:inherit;
+      outline:none;
+      background:#fff;
+      color:var(--text);
+    }
+
+    .field textarea{
+      min-height:96px;
+      resize:vertical;
+    }
+
+    .radio-group{
+      display:grid;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .radio-option{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:12px;
+      background:#fff;
+    }
+
+    .radio-option label{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      cursor:pointer;
+      font-size:14px;
+      line-height:1.4;
+      color:var(--text);
+    }
+
+    .muted{
+      color:var(--muted);
+      font-size:13px;
+      margin-top:6px;
+    }
+
+    .summary{
+      margin-top:18px;
+      border:1px solid var(--line);
+      background:#fbfcfd;
+      border-radius:16px;
+      padding:16px;
+      display:none;
+    }
+
+    .summary h3{
+      margin:0 0 10px;
+      color:var(--blue-dark);
+    }
+
+    .summary p{
+      margin:6px 0;
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .payment-link{
+      display:inline-block;
+      margin-top:12px;
+      color:#fff;
+      text-decoration:none;
+      background:linear-gradient(135deg,var(--blue-dark),var(--blue));
+      padding:12px 18px;
+      border-radius:12px;
+      font-weight:600;
+    }
+
+    .contact-section{
+      margin-top:18px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+    }
+
+    .contact-section h2{
+      margin:0 0 10px;
+      color:var(--blue-dark);
+    }
+
+    .contact-section p{
+      margin:6px 0;
+      color:var(--text);
+      line-height:1.5;
+    }
+
+    .whatsapp-float{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      width:58px;
+      height:58px;
+      border-radius:50%;
+      background:#25d366;
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      font-size:30px;
+      box-shadow:0 12px 28px rgba(0,0,0,.2);
+      z-index:999;
+      animation:floaty 2.4s ease-in-out infinite;
+    }
+
+    @keyframes floaty{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-5px)}
+    }
+
+    @media (max-width: 900px){
+      .detail-grid,
+      .buy-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="top-bar"></div>
 
-<!-- PANTALLA PRINCIPAL -->
-<div class="container" id="home">
-    <div class="card" onclick="verProducto()">
-        <img src="chajaas.jpg">
-        <div class="card-content">
-            <h1>Tiras Blanqueadoras Dentales</h1>
-            <p>Tiras Blanqueadoras de Dientes 5D, 14 unidades - Libre Peroxido ✨</p>
-            <div class="price">$13.999</div>
+  <!-- HOME -->
+  <section class="home-wrap" id="homeSection">
+    <div class="container">
+      <div class="card" onclick="openDetail()">
+        <div class="gallery">
+          <button class="arrow left" onclick="event.stopPropagation(); moveHome(-1)">‹</button>
+          <button class="arrow right" onclick="event.stopPropagation(); moveHome(1)">›</button>
+
+          <div class="track" id="homeTrack">
+            <div class="slide"><img src="" alt="Producto 1"></div>
+            <div class="slide"><img src="" alt="Producto 2"></div>
+            <div class="slide"><img src="" alt="Producto 3"></div>
+            <div class="slide"><img src="" alt="Producto 4"></div>
+          </div>
         </div>
+
+        <div class="card-content">
+          <h1>Tiras Blanqueadoras Dentales</h1>
+          <p class="small-title">Cintas blanqueadoras dentales 5D - de peróxido</p>
+          <p class="small-title">Resultados visibles en pocos días</p>
+          <p class="small-title">Caja de cintas blanqueadoras 5D</p>
+          <p class="info">Contiene siete paquetes. Cada paquete contiene 14 unidades (2,2 por paquete).</p>
+          <p class="price">$10.000</p>
+        </div>
+      </div>
     </div>
-</div>
+  </section>
 
-<!-- PANTALLA DETALLE -->
-<div class="detail" id="detalle">
-    <h1>Tiras Blanqueadoras Dentales</h1>
+  <!-- DETAIL -->
+  <section class="detail" id="detailSection">
+    <div class="container">
+      <div class="detail-grid">
+        <div class="panel">
+          <h1>Tiras Blanqueadoras Dentales</h1>
+          <p class="sub">Cintas blanqueadoras dentales 5D - de peróxido</p>
+          <p class="sub">Resultados visibles en pocos días</p>
+          <p class="sub">Caja de cintas blanqueadoras 5D</p>
+          <p class="sub">Contiene siete paquetes. Cada paquete contiene 14 unidades (2,2 por paquete).</p>
+          <p class="watermark">¿Por qué elegirlas?</p>
 
-    <img src="kk.jpg">
-    <img src="chajaas.jpg">
-    <img src="tiras-blanqueadoras-mercadona.jpg">
+          <div class="detail-gallery">
+            <button class="detail-arrow left" onclick="moveDetail(-1)">‹</button>
+            <button class="detail-arrow right" onclick="moveDetail(1)">›</button>
 
-    <p>✔ Blanqueamiento seguro en 7 días<br>
-       ✔ Fácil de usar<br>
-       ✔ Resultados rápidos desde el primer uso</p>
+            <div class="detail-track" id="detailTrack">
+              <div class="detail-slide"><img src="" alt="Imagen detalle 1"></div>
+              <div class="detail-slide"><img src="" alt="Imagen detalle 2"></div>
+              <div class="detail-slide"><img src="" alt="Imagen detalle 3"></div>
+              <div class="detail-slide"><img src="" alt="Imagen detalle 4"></div>
+            </div>
+          </div>
 
-    <a class="btn" href="https://mpago.la/32YvHbr" target="_blank">
-        Comprar ahora
-    </a>
+          <button class="btn" onclick="openBuy()">Comprar ahora</button>
+          <div class="back" onclick="goHome()">← Volver</div>
+        </div>
 
-    <span class="back" onclick="volver()">← Volver</span>
-</div>
+        <div class="panel">
+          <h2 class="section-title">Beneficios</h2>
+          <p class="sub">✔ Blanqueamiento seguro</p>
+          <p class="sub">✔ Fácil de usar</p>
+          <p class="sub">✔ Resultados rápidos</p>
+          <p class="sub">✔ Diseño prolijo y moderno</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<script>
-function verProducto() {
-    document.getElementById("home").style.display = "none";
-    document.getElementById("detalle").style.display = "block";
-}
+  <!-- BUY -->
+  <section class="buy" id="buySection">
+    <div class="container">
+      <div class="buy-grid">
+        <div class="panel">
+          <h2 class="section-title">Completar compra</h2>
 
-function volver() {
-    document.getElementById("detalle").style.display = "none";
-    document.getElementById("home").style.display = "flex";
-}
-</script>
+          <form id="purchaseForm">
+            <div class="field">
+              <label for="fullName">Nombre completo</label>
+              <input type="text" id="fullName" required>
+            </div>
+
+            <div class="field">
+              <label for="email">Mail</label>
+              <input type="email" id="email" required>
+            </div>
+
+            <div class="field">
+              <label for="phone">Teléfono</label>
+              <input type="tel" id="phone" required>
+            </div>
+
+            <div class="field">
+              <label>Entrega</label>
+              <div class="radio-group">
+                <div class="radio-option">
+                  <label>
+                    <input type="radio" name="delivery" value="envio" checked onchange="toggleDelivery()">
+                    <span>
+                      <strong>Envío a domicilio</strong><br>
+                      <span class="muted">Costo fijo: $5000. Envío manual por Correo Argentino.</span>
+                    </span>
+                  </label>
+                </div>
+
+                <div class="radio-option">
+                  <label>
+                    <input type="radio" name="delivery" value="presencial" onchange="toggleDelivery()">
+                    <span>
+                      <strong>Búsqueda presencial</strong><br>
+                      <span class="muted">Agustín M. García 6385 - Barrio Santa María de Tigre (contactarse por privado)</span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div id="shippingFields">
+              <div class="field">
+                <label for="address">Dirección</label>
+                <input type="text" id="address">
+              </div>
+
+              <div class="field">
+                <label for="city">Ciudad</label>
+                <input type="text" id="city">
+              </div>
+
+              <div class="field">
+                <label for="province">Provincia</label>
+                <input type="text" id="province">
+              </div>
+
+              <div class="field">
+                <label for="postalCode">Código postal</label>
+                <input type="text" id="postalCode">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="notes">Observaciones</label>
+              <textarea id="notes" placeholder="Escribí algún detalle extra si querés"></textarea>
+            </div>
+
+            <button class="btn" type="button" onclick="generateSummary()">Finalizar compra</button>
+          </form>
+
+          <div class="summary" id="summaryBox">
+            <h3>Resumen del pedido</h3>
+            <p id="summaryText"></p>
+            <a class="payment-link" href="https://mpago.la/1Cui5bz" target="_blank">Ir al link de pago</a>
+          </div>
+
+          <div class="back" onclick="goDetail()">← Volver</div>
+        </div>
+
+        <div class="panel">
+          <h2 class="section-title">Contactanos</h2>
+          <div class="contact-section">
+            <p><strong>Teléfono:</strong> 11-6112-6422</p>
+            <p><strong>Email:</strong> marco.rigiroli123@gmail.com</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <a class="whatsapp-float" href="https://wa.me/5491161126422" target="_blank">💬</a>
 
 </body>
 </html>
+
+<script>
+  // ---------- SECCIONES ----------
+  const home = document.getElementById("homeSection");
+  const detail = document.getElementById("detailSection");
+  const buy = document.getElementById("buySection");
+
+  function openDetail() {
+    home.style.display = "none";
+    detail.style.display = "block";
+  }
+
+  function goHome() {
+  detail.style.display = "none";
+  buy.style.display = "none";
+  home.style.display = "flex";
+
+  document.getElementById("summaryBox").style.display = "none";
+}
+
+  function openBuy() {
+    detail.style.display = "none";
+    buy.style.display = "block";
+  }
+
+  function goDetail() {
+    buy.style.display = "none";
+    detail.style.display = "block";
+  }
+
+  // ---------- SLIDER HOME ----------
+  const homeTrack = document.getElementById("homeTrack");
+
+  function moveHome(dir) {
+    const width = homeTrack.clientWidth;
+    homeTrack.scrollBy({
+      left: dir * width,
+      behavior: "smooth"
+    });
+  }
+
+  // ---------- SLIDER DETAIL ----------
+  const detailTrack = document.getElementById("detailTrack");
+
+  function moveDetail(dir) {
+    const width = detailTrack.clientWidth;
+    detailTrack.scrollBy({
+      left: dir * width,
+      behavior: "smooth"
+    });
+  }
+
+  // ---------- ENTREGA ----------
+  function toggleDelivery() {
+    const delivery = document.querySelector('input[name="delivery"]:checked').value;
+    const shippingFields = document.getElementById("shippingFields");
+
+    if (delivery === "envio") {
+      shippingFields.style.display = "block";
+    } else {
+      shippingFields.style.display = "none";
+    }
+  }
+
+  // ---------- RESUMEN ----------
+  function generateSummary() {
+    const name = document.getElementById("fullName").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const delivery = document.querySelector('input[name="delivery"]:checked').value;
+    const notes = document.getElementById("notes").value;
+
+    let summary = `
+      Nombre: ${name}<br>
+      Email: ${email}<br>
+      Teléfono: ${phone}<br>
+    `;
+
+    if (delivery === "envio") {
+      const address = document.getElementById("address").value;
+      const city = document.getElementById("city").value;
+      const province = document.getElementById("province").value;
+      const postalCode = document.getElementById("postalCode").value;
+
+      summary += `
+        Entrega: Envío a domicilio<br>
+        Dirección: ${address}, ${city}, ${province}, ${postalCode}<br>
+        Costo envío: $5000<br>
+      `;
+    } else {
+      summary += `
+        Entrega: Búsqueda presencial<br>
+      `;
+    }
+
+    if (notes) {
+      summary += `Observaciones: ${notes}<br>`;
+    }
+
+    document.getElementById("summaryText").innerHTML = summary;
+    document.getElementById("summaryBox").style.display = "block";
+  }
+      if (!name || !email || !phone) {
+  alert("Completá todos los campos obligatorios");
+  return;
+}
+      if (delivery === "envio" && (!address || !city || !province || !postalCode)) {
+  alert("Completá los datos de envío");
+  return;
+}
+      document.getElementById("summaryBox").scrollIntoView({ behavior: "smooth" });
+
+  // ---------- INIT ----------
+  toggleDelivery(); // para que cargue bien al inicio
+
+    
+</script>
